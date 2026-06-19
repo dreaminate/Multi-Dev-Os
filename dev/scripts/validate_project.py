@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+"""项目专属检查（**本项目填**）。`validate_dev.py` 会自动连带跑本文件的 `project_checks`。
+
+适配本项目就改这里：
+- `PROJECT_ANCHORS`：项目关键文件（存在性检查，相对仓库根）。
+- `STALE_PREFIXES`：活跃文档不应再出现的"迁移前旧路径"（防悬空引用）。
+- 还可在 `project_checks` 里加任意本项目自定义检查。
+适配新项目：**别动 validate_dev.py**，只改本文件。
+"""
+from __future__ import annotations
+
+from pathlib import Path
+
+# ── 项目配置（填这里）─────────────────────────────────────────────
+PROJECT_ANCHORS: list[str] = [
+    # "<相对仓库根的关键文件路径，如 app/core/foo.py>",
+]
+STALE_PREFIXES: list[str] = [
+    # "<迁移前旧路径前缀，活跃文档不应再出现>",
+]
+# 活跃文档（被 STALE_PREFIXES 扫描）。团队并发：per-dev 的 state/log/decisions/issues 各自维护、不在内。
+LIVE_DOCS: list[str] = [
+    "GOAL.md", "RULES.md", "RULES.project.md", "README.md", "CODEMAP.md", "TEAM.md",
+    "research/INDEX.md", "research/TRACE.md", "research/WORKFLOW.md", "exec/HANDOFF.md",
+]
+# ────────────────────────────────────────────────────────────────────
+
+
+def project_checks(DEV: Path, ROOT: Path) -> tuple[list[str], list[str]]:
+    oks: list[str] = []
+    fails: list[str] = []
+
+    for rel in PROJECT_ANCHORS:
+        (oks if (ROOT / rel).is_file() else fails).append(f"项目锚点 {rel}")
+    if not PROJECT_ANCHORS:
+        oks.append("（未配置项目锚点，跳过）")
+
+    stale_hits = 0
+    for rel in LIVE_DOCS:
+        p = DEV / rel
+        if not p.is_file():
+            continue
+        text = p.read_text(encoding="utf-8")
+        for pre in STALE_PREFIXES:
+            if pre in text:
+                fails.append(f"活跃文档 {rel} 含迁移前旧路径 `{pre}`（悬空引用）")
+                stale_hits += 1
+    if not STALE_PREFIXES or stale_hits == 0:
+        oks.append("活跃文档无迁移前旧路径悬空引用")
+
+    return oks, fails
