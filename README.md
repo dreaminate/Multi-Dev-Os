@@ -56,6 +56,21 @@ python dev/scripts/validate_dev.py
 
 ---
 
+## 给 Claude 的初始化提示词（把 dev/ 拷进项目后，整段复制给 Claude）
+
+```
+你要把这套「团队并发开发 OS」初始化进本项目。按顺序做，每步缺信息就停下问我、别瞎编：
+1. 读框架(不可改)：dev/README.md + dev/RULES.md + dev/exec/HANDOFF.md。
+2. 定团队 → dev/TEAM.md：问我成员+角色(我=leader 唯一；admin×N；developer)。
+3. 建本机身份 → dev/.identity(单行=我的 developer_id,须∈TEAM),并把 dev/.identity 加进项目根 .gitignore。
+4. 填项目契约(逐个问我+扫代码,照模板填)：dev/GOAL.md(终态)· dev/RULES.project.md(红线)· dev/CODEMAP.md(代码结构)· dev/scripts/validate_project.py(锚点/旧路径)。
+5. 建我的状态 → dev/state/{我的id}/state.md(现状 gap 骨架) + dev/log/{我的id}/log.md(日志骨架)。
+6. 自检 → python dev/scripts/validate_dev.py,绿即就绪。
+7. 之后每次开工用 dev/exec/HANDOFF.md 当入口。
+
+开局即守的铁律：① 文件夹/文件名严格照框架、不自创不改名(validate 会抓) ② 每个文件严格照其顶部「格式·防跑偏」骨架+对应模板填、不漂移 ③ state/board/log/experience/decisions/issues/研究台 全 per-developer folder,读要遍历聚合 ④ 导航 map(DEVMAP/_NAV)只定位,实时依据看原文+代码 ⑤ 分配/land 仅 leader/admin ⑥ 🟡未验证≠✅,不假绿灯。
+```
+
 ## 框架 · 勿改（= 本仓库的核心；改 = 改范式本身,回流本仓库别在项目里分叉）
 `dev/RULES.md` · `dev/README.md`(OS 规约) · `dev/exec/HANDOFF.md` · `dev/tasks/_templates/TASK.md` · `dev/research/{WORKFLOW, ideas/README, ideas/_TEMPLATE, active/README, active/_TEMPLATE, findings/_TEMPLATE}.md` · `dev/scripts/{validate_dev, build_board, build_dev_map, build_ledger, build_card_counters, build_log_index}.py` + `scripts/README.md` · 根 `CLAUDE.md`。
 
