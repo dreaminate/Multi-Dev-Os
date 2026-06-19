@@ -4,6 +4,146 @@
 
 ---
 
+## 结构与逻辑（详解）
+
+### 一、完整目录树（采纳后你的项目长这样）
+
+```
+<project>/
+├── CLAUDE.md                       ← 根路由:agent 开局先读它       [框架·勿改]
+├── .gitignore                      ← 含 dev/.identity(本机身份不入库)
+└── dev/                            ← 团队并发开发 OS（整套）
+    │
+    ├─❶ 全局单文件（committed · 全队共享一份）
+    │   ├── GOAL.md                 终态契约(北极星→子系统→工程标准)   [项目填·慢变]
+    │   ├── RULES.md                OS 通用铁律 §0–§8                  [框架·勿改]
+    │   ├── RULES.project.md        本项目红线/致命错误/性能标准        [项目填]
+    │   ├── CODEMAP.md              项目代码结构图(给 agent 导航)      [项目填]
+    │   ├── TEAM.md                 花名册:developer_id ↔ role        [项目填]
+    │   └── README.md               OS 规约总纲(怎么建)              [框架·勿改]
+    │
+    ├─❷ 本机身份（不入库 · 每人各异）
+    │   └── .identity               = 你的 developer_id(须 ∈ TEAM)   [本地·gitignore]
+    │
+    ├─❸ per-developer 状态（committed · 各写各文件 → 并发零冲突）
+    │   ├── state/{dev}/state.md          现状 gap(从本地代码来;🟡≠✅)
+    │   ├── board/{dev}/board.md          本人活跃卡(生成视图)
+    │   ├── log/{dev}/log.md              滚动日志(每 session 一行)
+    │   ├── experience/{dev}/...          技术坑经验库
+    │   ├── decisions/{dev}/...           决策(canonical 归 leader)
+    │   └── issues/{dev}/...              问题/风险登记
+    │        ▲ 读任何一类 = 遍历 {type}/*/ 聚合(靠 ❽ 导航 map 快定位)
+    │
+    ├─❹ 任务台 tasks/
+    │   ├── pool/{uuid8}/TASK.md          待分配(owner: wait)
+    │   ├── {dev}/{uuid8}/TASK.md         已分配给 dev(active)
+    │   ├── {dev}/done/{uuid8}/TASK.md    落档
+    │   └── _templates/TASK.md            卡模板(YAML frontmatter)    [框架·勿改]
+    │
+    ├─❺ 研究台 research/（也 per-dev）
+    │   ├── ideas/{dev}/  active/{dev}/  findings/{dev}/   灵感→深挖→设计
+    │   ├── INDEX.md  TRACE.md            全局聚合视图(溯源)          [项目填]
+    │   ├── WORKFLOW.md                   研究调查方法                 [框架·勿改]
+    │   └── archive/                      重资料(read-on-demand)
+    │
+    ├─❻ 执行台 exec/
+    │   └── HANDOFF.md                    新 session 入口提示词        [框架·勿改]
+    │
+    ├─❼ 闸 + 脚本 scripts/（全框架·勿改,除 validate_project）
+    │   ├── validate_dev.py               结构+团队+DAG 自检(唯一阻断闸)
+    │   ├── validate_project.py           项目锚点/旧路径              [项目填]
+    │   ├── build_board.py                生成本人 board
+    │   ├── build_dev_map.py              生成 DEVMAP + 各 _NAV
+    │   ├── build_ledger.py               全含量任务账本
+    │   ├── build_card_counters.py        OQ 计数器派生
+    │   └── build_log_index.py            全员 LOG 统一索引
+    │
+    └─❽ 生成的导航（脚本现生成 · 勿手改 · 只定位）
+        ├── DEVMAP.md                     全员→卡(按 developer + area)
+        └── {type}/_NAV.md                各 folder 的 developer→文件 索引
+```
+
+### 二、身份与角色
+
+```
+TEAM.md  developer_id ──▶ role
+                          ├── leader     ×1(唯一)  ┐ 可【分配】(pool→{dev})
+                          ├── admin      ×N         ┘ + 可【land】(合并进 main)
+                          └── developer            ── 只写 tasks/{自己}/ 名下卡 + self-review
+
+.identity(本机·不入库) = 你是谁;     canonical/全局决策 → 归 leader 的 decisions/{leader}/
+```
+
+### 三、任务卡生命周期 + id 体系
+
+```
+逻辑 id = {owner}-{uuid}      物理:文件夹名 = uuid 前 8 位 hex(纯,不带前缀)
+owner = wait(在 pool) | developer_id     依赖锚 全 32 位 uuid(前缀可变 · uuid 永不变)
+
+  三晋升源                       待分配池            分配(仅 leader/admin)         落档
+┌──────────────┐               ┌──────────┐      = 改归属文件夹          ┌───────────────────┐
+│ 研究台 findings │─┐            │  tasks/  │   pool/{uuid8}/             │ tasks/{dev}/done/  │
+│ GOAL.md gap    │─┼─mint uuid─▶│  pool/   │──────────────────────────▶│  {uuid8}/          │
+│ dev×claude 交互 │─┘            │ {uuid8}/ │   →  tasks/{dev}/{uuid8}/   └─────────▲─────────┘
+└──────────────┘               └──────────┘      (active · owner:dev)            │ 完成
+                                 owner:wait        ────────────────────────────────┘
+
+全部卡的 depends_on 组成有向无环图(DAG),validate 守【无环 + 无悬空】:
+        A ──▶ B ──▶ D          连通分量 = 可并行的工作簇
+             ╱                  (拆分/分配算法 = 后续 skill;DAG 校验已就位)
+        C ──╯
+        E ──▶ F ──▶ G
+```
+
+### 四、并发为什么零冲突 + 全局怎么读
+
+```
+单写者 dev-os:单一 STATE / BOARD / DECISIONS 文件
+              └─ 多人并发改同一文件 = git 冲突地狱
+        │ 升级
+        ▼
+团队 dev-os:有主的过程内容全 folder 化  {type}/{developer_id}/...
+   ├─ 各 developer 只编自己 folder 的文件         → 不同文件,git 几乎不撞
+   ├─ 全局视图(board/ledger/dev-map/nav/log-index)全【脚本从源现生成】→ 不落第二份手维护账本
+   └─ 读"全局某类" = 遍历 {type}/*/ 聚合;导航 map(DEVMAP/_NAV)快定位
+        ⚠ 铁律:map 只定位,实时依据永远是【原文 + 对应代码】
+```
+
+### 五、并发 Goal Loop
+
+```
+认身份(.identity / TEAM)
+   │  git pull main  +  看 DEVMAP/diff(代码动了→先刷理解,无 commit-hash)
+   ▼
+取卡 ── developer:自己 tasks/{你}/ 名下 todo(进实现须 review_status=1 且 待拍=0)
+       leader/admin:从 tasks/pool/ 分配
+   │
+   ▼
+写实现 + 对抗测试(种已知 bug 门必抓) ──▶ 测试跑绿 · 不破基线
+   │
+   ▼
+落档 tasks/{你}/done/ ─▶ 刷 state/ ─▶ build_board + build_dev_map ─▶ validate_dev
+   │
+   ▼
+land(合并进 main · 仅 leader/admin) ──▶ 他人 pull 同步 ──▶ 各自据新代码刷 state
+```
+
+### 六、约束 / 自检（validate_dev 守什么 = 唯一阻断闸,退出码 0/1）
+
+```
+身份   .identity ∈ TEAM · TEAM leader 唯一 · 本机 state+log 在
+卡     owner==所在文件夹 · 文件夹名==uuid8 · uuid 唯一不重复 · 缺 TASK.md→FAIL
+       非法卡(无 uuid 非 T-xxx)→FAIL · done 卡须 status=done
+依赖   无悬空 · DAG 无环
+归属   tasks/ 下文件夹须 ∈ {pool, _元目录, TEAM developer_id}(防孤儿)
+诚实   state ✅ 行须挂可指认证据(防假绿灯) · RULES 核心不变量哨兵
+OQ     拍板标签只认 [需拍板]/[已决] · 计数器一致 · todo 卡 [必填] 节齐
+连带   自动跑 validate_project(项目锚点存在 + 活跃文档无旧路径)
+冻结   历史卡保 legacy id(T-xxx)兼容,不重 mint
+```
+
+---
+
 ## 部署 / 采纳到你的项目（详细步骤）
 
 ### 0. 前置
