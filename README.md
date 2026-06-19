@@ -6,6 +6,12 @@
 
 ## 结构与逻辑（详解）
 
+![Multi-Dev-Os 结构图](docs/structure.svg)
+
+![Multi-Dev-Os 逻辑图](docs/logic.svg)
+
+> 上为可视版（GitHub 直接渲染）;下方字符画是同内容的细节详解。
+
 ### 一、完整目录树（采纳后你的项目长这样）
 
 ```

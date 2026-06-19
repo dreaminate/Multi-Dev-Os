@@ -1,0 +1,77 @@
+<svg width="100%" viewBox="0 0 680 850" role="img" xmlns="http://www.w3.org/2000/svg"><title>Multi-Dev-Os 完整结构</title><desc>团队并发开发 OS 的 dev 目录八区:全局单文件、本机身份、per-dev 状态、任务台、研究台、执行台、脚本闸、生成导航,按框架/项目填/per-dev/本地四级上色。</desc>
+<style>
+  text{font-family:-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
+  .t{font-size:14px;fill:#2c2c2a;}.ts{font-size:12px;fill:#5f5e5a;}.th{font-size:14px;font-weight:500;fill:#2c2c2a;}
+  .box{fill:#fbfaf8;stroke:#d3d1c7;stroke-width:0.5;}
+  .c-teal{fill:#E1F5EE;stroke:#0F6E56;stroke-width:0.5;}.c-teal .th,.c-teal .t{fill:#085041;}.c-teal .ts{fill:#0F6E56;}
+  .c-gray{fill:#F1EFE8;stroke:#5F5E5A;stroke-width:0.5;}.c-gray .th,.c-gray .t{fill:#444441;}.c-gray .ts{fill:#5F5E5A;}
+  .c-purple{fill:#EEEDFE;stroke:#534AB7;stroke-width:0.5;}.c-purple .th,.c-purple .t{fill:#3C3489;}.c-purple .ts{fill:#534AB7;}
+  .c-amber{fill:#FAEEDA;stroke:#854F0B;stroke-width:0.5;}.c-amber .th,.c-amber .t{fill:#633806;}.c-amber .ts{fill:#854F0B;}
+</style>
+<rect x="0" y="0" width="680" height="850" fill="#fdfdfb"/>
+<text class="th" x="40" y="22">Multi-Dev-Os · 完整结构（dev/ 八区）</text>
+<text class="ts" x="40" y="40">项目根:CLAUDE.md(路由·勿改) + .gitignore(含 dev/.identity);其余全在 dev/</text>
+<rect class="c-gray" x="40" y="48" width="11" height="11" rx="2"/><text class="ts" x="55" y="57">框架·勿改</text>
+<rect class="c-teal" x="150" y="48" width="11" height="11" rx="2"/><text class="ts" x="165" y="57">项目填</text>
+<rect class="c-purple" x="245" y="48" width="11" height="11" rx="2"/><text class="ts" x="260" y="57">per-dev·committed</text>
+<rect class="c-amber" x="410" y="48" width="11" height="11" rx="2"/><text class="ts" x="425" y="57">本地·gitignore</text>
+
+<rect class="box" x="40" y="68" width="600" height="106" rx="8"/>
+<text class="th" x="50" y="84">❶ 全局单文件 · committed 全队共享一份</text>
+<g class="c-teal"><rect x="46" y="92" width="186" height="34" rx="4"/><text class="th" x="54" y="107">GOAL.md</text><text class="ts" x="54" y="120">终态契约 · 慢变</text></g>
+<g class="c-gray"><rect x="246" y="92" width="186" height="34" rx="4"/><text class="th" x="254" y="107">RULES.md</text><text class="ts" x="254" y="120">OS 铁律 §0–8 · 勿改</text></g>
+<g class="c-teal"><rect x="446" y="92" width="186" height="34" rx="4"/><text class="th" x="454" y="107">RULES.project.md</text><text class="ts" x="454" y="120">本项目红线</text></g>
+<g class="c-teal"><rect x="46" y="132" width="186" height="34" rx="4"/><text class="th" x="54" y="147">CODEMAP.md</text><text class="ts" x="54" y="160">代码结构图</text></g>
+<g class="c-teal"><rect x="246" y="132" width="186" height="34" rx="4"/><text class="th" x="254" y="147">TEAM.md</text><text class="ts" x="254" y="160">花名册 + role</text></g>
+<g class="c-gray"><rect x="446" y="132" width="186" height="34" rx="4"/><text class="th" x="454" y="147">README.md</text><text class="ts" x="454" y="160">OS 规约 · 勿改</text></g>
+
+<rect class="box" x="40" y="188" width="600" height="60" rx="8"/>
+<text class="th" x="50" y="204">❷ 本机身份 · 不入库</text>
+<g class="c-amber"><rect x="46" y="212" width="300" height="34" rx="4"/><text class="th" x="54" y="227">.identity</text><text class="ts" x="54" y="240">= 你的 developer_id（须 ∈ TEAM）</text></g>
+
+<rect class="box" x="40" y="262" width="600" height="114" rx="8"/>
+<text class="th" x="50" y="278">❸ per-developer 状态 · committed · 各写各文件 → 并发零冲突</text>
+<g class="c-purple"><rect x="46" y="286" width="186" height="34" rx="4"/><text class="th" x="54" y="301">state/{dev}/</text><text class="ts" x="54" y="314">现状 gap · 🟡≠✅</text></g>
+<g class="c-purple"><rect x="246" y="286" width="186" height="34" rx="4"/><text class="th" x="254" y="301">board/{dev}/</text><text class="ts" x="254" y="314">本人卡 · 生成</text></g>
+<g class="c-purple"><rect x="446" y="286" width="186" height="34" rx="4"/><text class="th" x="454" y="301">log/{dev}/</text><text class="ts" x="454" y="314">滚动日志</text></g>
+<g class="c-purple"><rect x="46" y="326" width="186" height="34" rx="4"/><text class="th" x="54" y="341">experience/{dev}/</text><text class="ts" x="54" y="354">技术坑库</text></g>
+<g class="c-purple"><rect x="246" y="326" width="186" height="34" rx="4"/><text class="th" x="254" y="341">decisions/{dev}/</text><text class="ts" x="254" y="354">canonical 归 leader</text></g>
+<g class="c-purple"><rect x="446" y="326" width="186" height="34" rx="4"/><text class="th" x="454" y="341">issues/{dev}/</text><text class="ts" x="454" y="354">问题 / 风险</text></g>
+<text class="ts" x="50" y="372">读任一类 = 遍历 {type}/*/ 聚合（靠 ❽ 导航 map 快定位）</text>
+
+<rect class="box" x="40" y="390" width="600" height="60" rx="8"/>
+<text class="th" x="50" y="406">❹ 任务台 tasks/</text>
+<g class="c-purple"><rect x="46" y="414" width="139" height="34" rx="4"/><text class="th" x="52" y="429">pool/{uuid8}/</text><text class="ts" x="52" y="442">待分配 · owner wait</text></g>
+<g class="c-purple"><rect x="193" y="414" width="139" height="34" rx="4"/><text class="th" x="199" y="429">{dev}/{uuid8}/</text><text class="ts" x="199" y="442">已分配 · active</text></g>
+<g class="c-purple"><rect x="340" y="414" width="139" height="34" rx="4"/><text class="th" x="346" y="429">{dev}/done/</text><text class="ts" x="346" y="442">落档</text></g>
+<g class="c-gray"><rect x="487" y="414" width="139" height="34" rx="4"/><text class="th" x="493" y="429">_templates/</text><text class="ts" x="493" y="442">卡模板 · 勿改</text></g>
+
+<rect class="box" x="40" y="464" width="600" height="100" rx="8"/>
+<text class="th" x="50" y="480">❺ 研究台 research/ · 也 per-dev</text>
+<g class="c-purple"><rect x="46" y="488" width="186" height="34" rx="4"/><text class="th" x="54" y="503">ideas/{dev}/</text><text class="ts" x="54" y="516">灵感 · RFC</text></g>
+<g class="c-purple"><rect x="246" y="488" width="186" height="34" rx="4"/><text class="th" x="254" y="503">active/{dev}/</text><text class="ts" x="254" y="516">在研深挖</text></g>
+<g class="c-purple"><rect x="446" y="488" width="186" height="34" rx="4"/><text class="th" x="454" y="503">findings/{dev}/</text><text class="ts" x="454" y="516">build-ready 设计</text></g>
+<g class="c-teal"><rect x="46" y="528" width="139" height="34" rx="4"/><text class="th" x="52" y="543">INDEX.md</text><text class="ts" x="52" y="556">指针</text></g>
+<g class="c-teal"><rect x="193" y="528" width="139" height="34" rx="4"/><text class="th" x="199" y="543">TRACE.md</text><text class="ts" x="199" y="556">溯源</text></g>
+<g class="c-gray"><rect x="340" y="528" width="139" height="34" rx="4"/><text class="th" x="346" y="543">WORKFLOW.md</text><text class="ts" x="346" y="556">方法 · 勿改</text></g>
+<g class="c-gray"><rect x="487" y="528" width="139" height="34" rx="4"/><text class="th" x="493" y="543">archive/</text><text class="ts" x="493" y="556">重资料·按需</text></g>
+
+<rect class="box" x="40" y="578" width="600" height="60" rx="8"/>
+<text class="th" x="50" y="594">❻ 执行台 exec/</text>
+<g class="c-gray"><rect x="46" y="602" width="300" height="34" rx="4"/><text class="th" x="54" y="617">HANDOFF.md</text><text class="ts" x="54" y="630">新 session 入口提示词 · 勿改</text></g>
+
+<rect class="box" x="40" y="652" width="600" height="100" rx="8"/>
+<text class="th" x="50" y="668">❼ 闸 + 脚本 scripts/ · 全框架勿改（除 validate_project）</text>
+<g class="c-gray"><rect x="46" y="676" width="186" height="34" rx="4"/><text class="th" x="54" y="691">validate_dev.py</text><text class="ts" x="54" y="704">自检 · 唯一阻断闸</text></g>
+<g class="c-teal"><rect x="246" y="676" width="186" height="34" rx="4"/><text class="th" x="254" y="691">validate_project.py</text><text class="ts" x="254" y="704">项目锚点 · 填</text></g>
+<g class="c-gray"><rect x="446" y="676" width="186" height="34" rx="4"/><text class="th" x="454" y="691">build_board.py</text><text class="ts" x="454" y="704">生成本人板</text></g>
+<g class="c-gray"><rect x="46" y="716" width="139" height="34" rx="4"/><text class="th" x="52" y="731">build_dev_map</text><text class="ts" x="52" y="744">DEVMAP+_NAV</text></g>
+<g class="c-gray"><rect x="193" y="716" width="139" height="34" rx="4"/><text class="th" x="199" y="731">build_ledger</text><text class="ts" x="199" y="744">全含量账</text></g>
+<g class="c-gray"><rect x="340" y="716" width="139" height="34" rx="4"/><text class="th" x="346" y="731">build_card_cnt</text><text class="ts" x="346" y="744">OQ 计数</text></g>
+<g class="c-gray"><rect x="487" y="716" width="139" height="34" rx="4"/><text class="th" x="493" y="731">build_log_index</text><text class="ts" x="493" y="744">LOG 索引</text></g>
+
+<rect class="box" x="40" y="766" width="600" height="60" rx="8"/>
+<text class="th" x="50" y="782">❽ 生成的导航 · 脚本现生成 · 勿手改 · 只定位</text>
+<g class="c-gray"><rect x="46" y="790" width="290" height="34" rx="4"/><text class="th" x="54" y="805">DEVMAP.md</text><text class="ts" x="54" y="818">全员→卡 · 按 developer+area</text></g>
+<g class="c-gray"><rect x="350" y="790" width="290" height="34" rx="4"/><text class="th" x="358" y="805">{type}/_NAV.md</text><text class="ts" x="358" y="818">各 folder developer→文件 索引</text></g>
+</svg>
