@@ -37,15 +37,16 @@ echo "dev/.identity" >> .gitignore
 ### 4. 建你的本机身份 + 状态
 ```bash
 echo "你的-developer-id" > dev/.identity            # 须 ∈ TEAM.md
-mkdir -p "dev/state/你的-developer-id"
+mkdir -p "dev/state/你的-developer-id" "dev/log/你的-developer-id"
 printf '# STATE · 现状 gap\n\n> 现状 vs GOAL,🟡 未验证 ≠ ✅。\n' > "dev/state/你的-developer-id/state.md"
+printf '# LOG · 滚动日志\n\n> 每 session 末落一行(做了啥 + 下一步)。\n' > "dev/log/你的-developer-id/log.md"
 ```
 
 ### 5. 自检（绿即就绪）
 ```bash
 python dev/scripts/validate_dev.py
 ```
-> 没填 `.identity` 时它会 FAIL 提示"`.identity` 为空/缺失"——这就是采纳清单本身。填好 + 建好 state 后转 PASS。
+> 没填 `.identity` 时它会 FAIL 提示"`.identity` 为空/缺失"——这就是采纳清单本身。填好 + 建好 state + log 后转 PASS。
 
 ### 6. 日常（并发 Goal Loop）
 入口提示词 = `dev/exec/HANDOFF.md`（整段复制给新 session）。
