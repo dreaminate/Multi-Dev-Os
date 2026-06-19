@@ -66,5 +66,3 @@ python dev/scripts/validate_dev.py
 - **生成视图不手编**：board / ledger / dev-map / log-index / nav 全脚本现生成。
 - **自检**：`validate_dev.py`(身份∈TEAM / leader 唯一 / 卡 owner==所在文件夹 / 文件名==uuid8 / 依赖无悬空 + DAG 无环 / state 不假绿灯)。
 - **代码新鲜度**：开工前 `git pull` main；新提交触及你卡依赖代码 → 先看 diff + `DEVMAP` 再动手(git pull/diff = 原生信号,不另设 hash)。
-
-> 历史：本范式由单写者版 dev-os 升级而来（folder 化解并发冲突）。冻结的历史内容保 legacy id,不重 mint。
