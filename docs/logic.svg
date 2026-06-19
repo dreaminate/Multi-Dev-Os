@@ -28,7 +28,7 @@
 <rect class="box" x="40" y="184" width="600" height="150" rx="8"/>
 <text class="th" x="50" y="202">② 任务流（生命周期）· 逻辑 id = {owner}-{uuid} · 文件夹名 = uuid8</text>
 <g class="c-purple"><rect x="46" y="212" width="158" height="44" rx="4"/><text class="th" x="54" y="231">三晋升源</text><text class="ts" x="54" y="245">研究 / GOAL / dev×claude</text></g>
-<g class="c-amber"><rect x="250" y="214" width="150" height="40" rx="4"/><text class="th" x="258" y="231">pool/{uuid8}</text><text class="ts" x="258" y="245">待分配 · owner wait</text></g>
+<g class="c-purple"><rect x="250" y="214" width="150" height="40" rx="4"/><text class="th" x="258" y="231">pool/{uuid8}</text><text class="ts" x="258" y="245">待分配 · owner wait · committed</text></g>
 <g class="c-purple"><rect x="448" y="214" width="184" height="40" rx="4"/><text class="th" x="456" y="231">{dev}/{uuid8}</text><text class="ts" x="456" y="245">已分配 · active</text></g>
 <g class="c-purple"><rect x="448" y="276" width="184" height="38" rx="4"/><text class="th" x="456" y="291">{dev}/done/{uuid8}</text><text class="ts" x="456" y="304">落档</text></g>
 <line x1="204" y1="234" x2="248" y2="234" stroke="#7a7873" stroke-width="1.5" marker-end="url(#arrow)"/>
