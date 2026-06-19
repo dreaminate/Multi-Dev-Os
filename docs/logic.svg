@@ -54,6 +54,6 @@
 
 <rect class="box" x="40" y="482" width="600" height="100" rx="8"/>
 <text class="th" x="50" y="500">④ 并发原理 + 自检</text>
-<g class="c-gray"><rect x="46" y="508" width="290" height="64" rx="4"/><text class="th" x="54" y="526">folder 化 → 各写各文件 · 零冲突</text><text class="ts" x="54" y="544">全局视图(board/dev-map/ledger…)脚本现生成</text><text class="ts" x="54" y="562">读 = 遍历 {type}/*/ 聚合;map 只定位、看原文+代码</text></g>
-<g class="c-red"><rect x="350" y="508" width="290" height="64" rx="4"/><text class="th" x="358" y="526">validate_dev · 唯一阻断闸</text><text class="ts" x="358" y="544">身份∈TEAM/leader唯一 · owner==folder · uuid 唯一</text><text class="ts" x="358" y="562">缺TASK.md/DAG成环/悬空/孤儿/假绿灯/OQ → FAIL</text></g>
+<g class="c-gray"><rect x="46" y="508" width="290" height="64" rx="4"/><text class="th" x="54" y="526">folder 化 → per-dev 文件零冲突</text><text class="ts" x="54" y="544">全局视图脚本现生成 · 读=遍历{type}/*/聚合</text><text class="ts" x="54" y="562">全局单文件(TEAM/GOAL/DEVMAP)land 时 leader 合</text></g>
+<g class="c-red"><rect x="350" y="508" width="290" height="64" rx="4"/><text class="th" x="358" y="526">validate_dev · 唯一阻断闸</text><text class="ts" x="358" y="544">身份∈TEAM/leader唯一 · owner==folder · uuid 唯一</text><text class="ts" x="358" y="562">缺TASK.md/成环/悬空/孤儿/视图过期/假绿灯 → FAIL</text></g>
 </svg>

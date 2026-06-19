@@ -1,6 +1,6 @@
 # Multi-Dev-Os · 团队并发协作开发范式（可复用框架）
 
-把一个项目变成「**身份 + 五台 + 并发 Goal Loop**」驱动的协作仓库：多 developer 各写各的 folder、**并发零冲突**，全局视图脚本现生成，导航 map 只定位、实时看原文 + 代码。范式细节见 `dev/README.md`。
+把一个项目变成「**身份 + 五台 + 并发 Goal Loop**」驱动的协作仓库：多 developer 各写各的 folder、**per-dev 内容零冲突**（全局少数文件 land 时由 leader 合），全局视图脚本现生成、validate 守新鲜度，导航 map 只定位、实时看原文 + 代码。范式细节见 `dev/README.md`。
 
 ---
 
@@ -101,7 +101,7 @@ owner = wait(在 pool) | developer_id     依赖锚 全 32 位 uuid(前缀可变
         E ──▶ F ──▶ G
 ```
 
-### 四、并发为什么零冲突 + 全局怎么读
+### 四、并发为什么(几乎)零冲突 + 全局怎么读
 
 ```
 单写者 dev-os:单一 STATE / BOARD / DECISIONS 文件
@@ -109,8 +109,9 @@ owner = wait(在 pool) | developer_id     依赖锚 全 32 位 uuid(前缀可变
         │ 升级
         ▼
 团队 dev-os:有主的过程内容全 folder 化  {type}/{developer_id}/...
-   ├─ 各 developer 只编自己 folder 的文件         → 不同文件,git 几乎不撞
-   ├─ 全局视图(board/ledger/dev-map/nav/log-index)全【脚本从源现生成】→ 不落第二份手维护账本
+   ├─ 各 developer 只编自己 folder 的文件         → 不同文件,per-dev 内容零冲突
+   ├─ 全局视图(board/ledger/dev-map/nav/log-index)全【脚本从源现生成】→ 不落第二份手维护账本 · validate 守新鲜度
+   ├─ 全局少数单文件(TEAM/GOAL/CODEMAP/RULES.project)仍可能并发改 → leader land 时合并(非"全局零冲突")
    └─ 读"全局某类" = 遍历 {type}/*/ 聚合;导航 map(DEVMAP/_NAV)快定位
         ⚠ 铁律:map 只定位,实时依据永远是【原文 + 对应代码】
 ```
@@ -142,6 +143,7 @@ land(合并进 main · 仅 leader/admin) ──▶ 他人 pull 同步 ──▶ 
        非法卡(无 uuid 非 T-xxx)→FAIL · done 卡须 status=done
 依赖   无悬空 · DAG 无环
 归属   tasks/ 下文件夹须 ∈ {pool, _元目录, TEAM developer_id}(防孤儿)
+视图   DEVMAP/_NAV/board 重算比对 = 盘上一致(改卡没跑 build_*→过期 FAIL)
 诚实   state ✅ 行须挂可指认证据(防假绿灯) · RULES 核心不变量哨兵
 OQ     拍板标签只认 [需拍板]/[已决] · 计数器一致 · todo 卡 [必填] 节齐
 连带   自动跑 validate_project(项目锚点存在 + 活跃文档无旧路径)
