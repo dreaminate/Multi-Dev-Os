@@ -12,7 +12,7 @@
 
 > 上为可视版（GitHub 直接渲染）;下方字符画是同内容的细节详解。
 
-### 一、完整目录树（采纳后你的项目长这样）
+### 一、完整目录树
 
 ```
 <project>/
@@ -75,7 +75,7 @@
 TEAM.md  developer_id ──▶ role
                           ├── leader     ×1(唯一)  ┐ 可【分配】(pool→{dev})
                           ├── admin      ×N         ┘ + 可【land】(合并进 main)
-                          └── developer            ── 只写 tasks/{自己}/ 名下卡 + self-review
+                          └── developer  ×N           ── 只写 tasks/{自己}/ 名下卡 + self-review
 
 .identity(本机·不入库) = 你是谁;     canonical/全局决策 → 归 leader 的 decisions/{leader}/
 ```
