@@ -1,55 +1,88 @@
-<svg width="100%" viewBox="0 0 900 500" role="img" xmlns="http://www.w3.org/2000/svg"><title>Multi-Dev-Os 运作流程</title><desc>团队并发开发 OS 的运作流程:身份与角色、任务生命周期与 DAG、并发 Goal Loop、folder 化并发原理与 validate 自检。</desc>
+<svg width="100%" viewBox="0 0 960 690" role="img" xmlns="http://www.w3.org/2000/svg"><title>Multi-Dev-Os 运作流程</title><desc>团队并发开发 OS 的完整流程。</desc>
 <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7a7873" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
 <style>
  text{font-family:-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
- .fn{font-size:11.5px;font-weight:600;}.ds{font-size:10.5px;}.tg{font-size:13px;font-weight:600;fill:#33322f;}.lbl{font-size:10px;fill:#7a7873;}
+ .fn{font-size:11.5px;font-weight:600;}.ds{font-size:10px;}.tg{font-size:13px;font-weight:600;fill:#33322f;}.lbl{font-size:10px;fill:#7a7873;}
  .box{fill:#fbfaf8;stroke:#d8d6cc;stroke-width:0.6;}
  .c-teal{fill:#E1F5EE;stroke:#0F6E56;stroke-width:0.5;}.c-teal .fn{fill:#085041;}.c-teal .ds{fill:#0F6E56;}
  .c-gray{fill:#F1EFE8;stroke:#5F5E5A;stroke-width:0.5;}.c-gray .fn{fill:#444441;}.c-gray .ds{fill:#5F5E5A;}
  .c-purple{fill:#EEEDFE;stroke:#534AB7;stroke-width:0.5;}.c-purple .fn{fill:#3C3489;}.c-purple .ds{fill:#534AB7;}
  .c-amber{fill:#FAEEDA;stroke:#854F0B;stroke-width:0.5;}.c-amber .fn{fill:#633806;}.c-amber .ds{fill:#854F0B;}
  .c-red{fill:#FCEBEB;stroke:#A32D2D;stroke-width:0.5;}.c-red .fn{fill:#791F1F;}.c-red .ds{fill:#A32D2D;}
+ .node{fill:#EEEDFE;stroke:#534AB7;stroke-width:0.8;}.nt{font-size:10px;font-weight:600;fill:#3C3489;}
 </style>
-<rect x="0" y="0" width="900" height="500" fill="#fdfdfb"/>
-<text x="40" y="28" style="font-size:16px;font-weight:600;fill:#2c2c2a">Multi-Dev-Os 运作流程</text>
-<text x="40" y="47" style="font-size:11.5px;fill:#5f5e5a">你是谁 → 任务从哪来 → 怎么干(并发 Goal Loop) → 为什么不冲突,以及自检</text>
+<rect x="0" y="0" width="960" height="690" fill="#fdfdfb"/>
+<text x="40" y="30" style="font-size:17px;font-weight:600;fill:#2c2c2a">Multi-Dev-Os 运作流程</text>
+<text x="40" y="50" style="font-size:11.5px;fill:#5f5e5a">六个部分:身份与角色 → 任务来源与依赖 → 分配与落地 → 并发 Goal Loop → 并发原理 → validate 自检。</text>
 
-<rect class="box" x="40" y="58" width="820" height="86" rx="8"/>
-<text class="tg" x="50" y="76">① 身份、角色、权限</text>
-<g class="c-amber"><rect x="46" y="84" width="240" height="32" rx="4"/><text class="fn" x="54" y="98">.identity</text><text class="ds" x="54" y="111">本机 developer_id（不入库）</text></g>
-<line x1="286" y1="100" x2="328" y2="100" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="290" y="95">值∈</text>
-<g class="c-teal"><rect x="332" y="84" width="150" height="32" rx="4"/><text class="fn" x="340" y="98">TEAM.md</text><text class="ds" x="340" y="111">全员花名册</text></g>
-<line x1="482" y1="100" x2="524" y2="111" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="486" y="95">定 role</text>
-<g class="c-purple"><rect x="528" y="82" width="324" height="26" rx="4"/><text class="fn" x="536" y="99">leader×1 / admin×N · 可分配 + land</text></g>
-<g class="c-teal"><rect x="528" y="112" width="324" height="26" rx="4"/><text class="fn" x="536" y="129">developer · 只写自己卡 + self-review</text></g>
+<rect class="box" x="40" y="60" width="880" height="100" rx="8"/>
+<text class="tg" x="50" y="78">① 身份与角色:你是谁,能做什么</text>
+<g class="c-amber"><rect x="46" y="86" width="250" height="30" rx="4"/><text class="fn" x="54" y="100">.identity</text><text class="ds" x="54" y="112">本机 developer_id,gitignore 不入库</text></g>
+<g class="c-teal"><rect x="46" y="120" width="250" height="30" rx="4"/><text class="fn" x="54" y="134">TEAM.md 花名册</text><text class="ds" x="54" y="146">你的 id 须在表里</text></g>
+<line x1="296" y1="118" x2="330" y2="118" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="300" y="113">定 role</text>
+<g class="c-purple"><rect x="336" y="86" width="578" height="22" rx="4"/><text class="fn" x="344" y="101">leader ×1:分配 + land,canonical 决策归 leader 的 folder</text></g>
+<g class="c-purple"><rect x="336" y="112" width="578" height="22" rx="4"/><text class="fn" x="344" y="127">admin ×N:分配 + land</text></g>
+<g class="c-teal"><rect x="336" y="138" width="578" height="20" rx="4"/><text class="fn" x="344" y="152">developer ×N:只写自己名下卡 + self-review</text></g>
 
-<rect class="box" x="40" y="150" width="820" height="120" rx="8"/>
-<text class="tg" x="50" y="168">② 任务生命周期（卡放在 uuid8 文件夹）</text>
-<g class="c-teal"><rect x="46" y="178" width="180" height="42" rx="4"/><text class="fn" x="54" y="194">三晋升源</text><text class="ds" x="54" y="208">研究台 / GOAL / dev×claude</text></g>
-<line x1="226" y1="198" x2="268" y2="198" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="228" y="193">mint uuid</text>
-<g class="c-purple"><rect x="272" y="180" width="150" height="36" rx="4"/><text class="fn" x="280" y="196">pool/{uuid8}/</text><text class="ds" x="280" y="209">待分配 · committed</text></g>
-<line x1="422" y1="198" x2="462" y2="198" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="424" y="193">分配·admin</text>
-<g class="c-purple"><rect x="466" y="180" width="150" height="36" rx="4"/><text class="fn" x="474" y="196">{dev}/{uuid8}/</text><text class="ds" x="474" y="209">active</text></g>
-<line x1="616" y1="198" x2="656" y2="198" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="622" y="193">完成</text>
-<g class="c-purple"><rect x="660" y="180" width="160" height="36" rx="4"/><text class="fn" x="668" y="196">{dev}/done/</text><text class="ds" x="668" y="209">落档 → land</text></g>
-<text x="50" y="240" style="font-size:10.5px;fill:#5f5e5a">所有卡的 depends_on 构成 DAG,validate 检查无环、无悬空;每个连通分量是一组可并行的工作。</text>
-<text x="50" y="258" style="font-size:10.5px;fill:#5f5e5a">land(done 合并进 main)只有 leader/admin 能做;怎么拆分、怎么分配是后续 skill。</text>
+<rect class="box" x="40" y="166" width="880" height="128" rx="8"/>
+<text class="tg" x="50" y="184">② 任务从哪来:三个来源进 pool,靠 depends_on 连成 DAG</text>
+<g class="c-teal"><rect x="46" y="192" width="190" height="24" rx="4"/><text class="fn" x="54" y="207">研究台 findings</text></g>
+<g class="c-teal"><rect x="46" y="220" width="190" height="24" rx="4"/><text class="fn" x="54" y="235">GOAL.md 的 gap</text></g>
+<g class="c-teal"><rect x="46" y="248" width="190" height="24" rx="4"/><text class="fn" x="54" y="263">developer × claude 交互</text></g>
+<line x1="236" y1="232" x2="276" y2="232" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="238" y="227">mint uuid</text>
+<g class="c-purple"><rect x="280" y="218" width="190" height="32" rx="4"/><text class="fn" x="288" y="234">tasks/pool/{uuid8}/</text><text class="ds" x="288" y="246">owner: wait · committed</text></g>
+<text class="lbl" x="500" y="200" style="font-size:11px;fill:#5f5e5a">depends_on 组成 DAG,validate 检查无环、无悬空</text>
+<rect class="node" x="520" y="214" width="22" height="20" rx="4"/><text class="nt" x="528" y="228">A</text>
+<rect class="node" x="588" y="214" width="22" height="20" rx="4"/><text class="nt" x="596" y="228">B</text>
+<rect class="node" x="656" y="214" width="22" height="20" rx="4"/><text class="nt" x="664" y="228">D</text>
+<rect class="node" x="588" y="250" width="22" height="20" rx="4"/><text class="nt" x="596" y="264">C</text>
+<line x1="542" y1="224" x2="586" y2="224" stroke="#7a7873" stroke-width="1.3" marker-end="url(#ar)"/>
+<line x1="610" y1="224" x2="654" y2="224" stroke="#7a7873" stroke-width="1.3" marker-end="url(#ar)"/>
+<line x1="599" y1="250" x2="599" y2="236" stroke="#7a7873" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect class="node" x="740" y="214" width="22" height="20" rx="4"/><text class="nt" x="748" y="228">E</text>
+<rect class="node" x="808" y="214" width="22" height="20" rx="4"/><text class="nt" x="816" y="228">F</text>
+<rect class="node" x="876" y="214" width="22" height="20" rx="4"/><text class="nt" x="884" y="228">G</text>
+<line x1="762" y1="224" x2="806" y2="224" stroke="#7a7873" stroke-width="1.3" marker-end="url(#ar)"/>
+<line x1="830" y1="224" x2="874" y2="224" stroke="#7a7873" stroke-width="1.3" marker-end="url(#ar)"/>
+<text class="lbl" x="520" y="278">两个连通分量互不依赖,可以并行</text>
 
-<rect class="box" x="40" y="276" width="820" height="98" rx="8"/>
-<text class="tg" x="50" y="294">③ 并发 Goal Loop</text>
-<g class="c-teal"><rect x="46" y="302" width="130" height="42" rx="4"/><text class="fn" x="54" y="319">认身份 + pull</text><text class="ds" x="54" y="333">看 DEVMAP/diff</text></g>
-<line x1="176" y1="323" x2="212" y2="323" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
-<g class="c-teal"><rect x="216" y="302" width="100" height="42" rx="4"/><text class="fn" x="224" y="319">取卡</text><text class="ds" x="224" y="333">自己 / pool</text></g>
-<line x1="316" y1="323" x2="352" y2="323" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
-<g class="c-teal"><rect x="356" y="302" width="134" height="42" rx="4"/><text class="fn" x="364" y="319">实现 + 对抗测试</text><text class="ds" x="364" y="333">跑绿 · 不破基线</text></g>
-<line x1="490" y1="323" x2="526" y2="323" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
-<g class="c-teal"><rect x="530" y="302" width="144" height="42" rx="4"/><text class="fn" x="538" y="319">落档 + 刷 state</text><text class="ds" x="538" y="333">build + validate</text></g>
-<line x1="674" y1="323" x2="710" y2="323" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
-<g class="c-purple"><rect x="714" y="302" width="130" height="42" rx="4"/><text class="fn" x="722" y="319">land</text><text class="ds" x="722" y="333">仅 leader/admin</text></g>
-<path d="M779 344 V356 H110 V346" fill="none" stroke="#7a7873" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ar)"/><text x="320" y="353" style="font-size:10px;fill:#7a7873">他人 pull main 同步,各自据新代码刷 state</text>
+<rect class="box" x="40" y="300" width="880" height="98" rx="8"/>
+<text class="tg" x="50" y="318">③ 分配与落地:只有 leader/admin 能分配、能 land</text>
+<g class="c-purple"><rect x="46" y="332" width="180" height="42" rx="4"/><text class="fn" x="54" y="349">pool/{uuid8}/</text><text class="ds" x="54" y="363">待分配 · owner wait</text></g>
+<line x1="226" y1="353" x2="284" y2="353" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="228" y="348">分配=改归属文件夹</text>
+<g class="c-purple"><rect x="290" y="332" width="180" height="42" rx="4"/><text class="fn" x="298" y="349">{dev}/{uuid8}/</text><text class="ds" x="298" y="363">active · owner = dev</text></g>
+<line x1="470" y1="353" x2="528" y2="353" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="478" y="348">做完</text>
+<g class="c-purple"><rect x="534" y="332" width="160" height="42" rx="4"/><text class="fn" x="542" y="349">{dev}/done/</text><text class="ds" x="542" y="363">落档</text></g>
+<line x1="694" y1="353" x2="752" y2="353" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/><text class="lbl" x="700" y="348">land</text>
+<g class="c-gray"><rect x="758" y="332" width="156" height="42" rx="4"/><text class="fn" x="766" y="349">main 分支</text><text class="ds" x="766" y="363">已合并</text></g>
 
-<rect class="box" x="40" y="380" width="820" height="106" rx="8"/>
-<text class="tg" x="50" y="398">④ 为什么不冲突,以及怎么自检</text>
-<g class="c-gray"><rect x="46" y="406" width="396" height="74" rx="4"/><text class="fn" x="54" y="424">按 folder 分开,per-dev 文件基本不冲突</text><text class="ds" x="54" y="442">少数共享单文件(TEAM/GOAL/DEVMAP) land 时由 leader 合</text><text class="ds" x="54" y="460">全局视图脚本现生成 · 读某一类就遍历 {type}/*/ 聚合</text><text class="ds" x="54" y="476">导航 map 只定位,实际看原文和代码</text></g>
-<g class="c-red"><rect x="462" y="406" width="390" height="74" rx="4"/><text class="fn" x="470" y="424">validate_dev · 唯一阻断闸</text><text class="ds" x="470" y="442">身份∈TEAM / leader 唯一 · owner==folder · uuid 唯一</text><text class="ds" x="470" y="460">缺TASK.md / 成环 / 悬空 / 孤儿 → FAIL</text><text class="ds" x="470" y="476">生成视图过期 / state 假绿灯 → FAIL</text></g>
+<rect class="box" x="40" y="404" width="880" height="118" rx="8"/>
+<text class="tg" x="50" y="422">④ 并发 Goal Loop:每个 developer 自己的循环</text>
+<g class="c-teal"><rect x="46" y="432" width="160" height="44" rx="4"/><text class="fn" x="54" y="449">认身份 + pull</text><text class="ds" x="54" y="463">git pull · 看 DEVMAP/diff</text></g>
+<line x1="206" y1="454" x2="232" y2="454" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
+<g class="c-teal"><rect x="236" y="432" width="160" height="44" rx="4"/><text class="fn" x="244" y="449">取卡</text><text class="ds" x="244" y="463">自己名下 todo</text></g>
+<line x1="396" y1="454" x2="422" y2="454" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
+<g class="c-teal"><rect x="426" y="432" width="170" height="44" rx="4"/><text class="fn" x="434" y="449">实现 + 对抗测试</text><text class="ds" x="434" y="463">种坏门必抓 · 不破基线</text></g>
+<line x1="596" y1="454" x2="622" y2="454" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
+<g class="c-teal"><rect x="626" y="432" width="170" height="44" rx="4"/><text class="fn" x="634" y="449">落档 + 刷 state</text><text class="ds" x="634" y="463">build_* + validate_dev</text></g>
+<line x1="796" y1="454" x2="822" y2="454" stroke="#7a7873" stroke-width="1.4" marker-end="url(#ar)"/>
+<g class="c-purple"><rect x="826" y="432" width="88" height="44" rx="4"/><text class="fn" x="834" y="449">land</text><text class="ds" x="834" y="463">leader/admin</text></g>
+<path d="M870 476 V490 H110 V478" fill="none" stroke="#7a7873" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ar)"/><text x="360" y="487" style="font-size:10px;fill:#7a7873">他人 pull main 同步,各自据新代码刷 state</text>
+<text class="lbl" x="50" y="508" style="font-size:10px">取卡闸(developer):review_status=1(被分配者过目)且 待拍=0(Open Questions 全决)才进实现;land 仅 leader/admin。</text>
+
+<rect class="box" x="40" y="528" width="436" height="138" rx="8"/>
+<text class="tg" x="50" y="546">⑤ 为什么并发很少冲突</text>
+<text class="ds" x="50" y="566" style="fill:#444441">· 有主内容按 {type}/{dev}/ 分 folder → 各写各文件</text>
+<text class="ds" x="50" y="586" style="fill:#444441">· 全局视图(board/ledger/dev-map/nav)脚本现生成,不手维护第二份</text>
+<text class="ds" x="50" y="606" style="fill:#444441">· 少数共享单文件(TEAM/GOAL/CODEMAP/RULES.project) → leader land 时合</text>
+<text class="ds" x="50" y="626" style="fill:#444441">· 读某类要遍历 {type}/*/ 聚合</text>
+<text class="ds" x="50" y="646" style="fill:#444441">· 导航 map 只用来定位,实际看原文 + 代码</text>
+
+<rect class="box" x="484" y="528" width="436" height="138" rx="8"/>
+<text class="tg" x="494" y="546">⑥ validate_dev 自检(退出码 0 / 1)</text>
+<text class="ds" x="494" y="566" style="fill:#791F1F">· 身份 ∈ TEAM · leader 唯一 · 本机 state/log 在</text>
+<text class="ds" x="494" y="586" style="fill:#791F1F">· 卡:owner==文件夹 · 名==uuid8 · uuid 唯一 · 缺 TASK.md→FAIL</text>
+<text class="ds" x="494" y="606" style="fill:#791F1F">· 依赖无悬空 · DAG 无环</text>
+<text class="ds" x="494" y="626" style="fill:#791F1F">· 生成视图新鲜(过期→FAIL) · state 不假绿灯</text>
+<text class="ds" x="494" y="646" style="fill:#791F1F">· OQ 标签/计数一致 · 连带跑 validate_project</text>
 </svg>
