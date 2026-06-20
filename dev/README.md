@@ -25,6 +25,7 @@
 | 研究台 | `research/` | `ideas/active/findings/{id}/` + `INDEX`/`TRACE`(全局聚合) + `WORKFLOW`(方法) + `archive` | 结构框架·内容 per-dev |
 | 执行台 | `exec/` | `HANDOFF.md`(入口) | 框架 |
 | 闸+脚本 | `scripts/` | `validate_dev` `validate_project` `build_{board,dev_map,ledger,card_counters,log_index}` | framework |
+| Agent skills | `skills/` | 项目内 skill 源码；默认部署后 Claude Code 读 `.claude/skills/` | 源码 committed·部署视图生成 |
 
 > 导航 map(**生成、勿手维护**):`DEVMAP.md`(全员→卡,按 area 功能查)+ 各 folder `_NAV.md`。跑 `build_dev_map.py` 刷新。
 
@@ -77,6 +78,25 @@
 ## 自检
 
 `python dev/scripts/validate_dev.py` —— harness 不靠手工纪律,自检:身份∈TEAM / leader 唯一 / 卡 owner==所在文件夹 / 文件名==uuid8 / **依赖无悬空 + DAG 无环** / 生成视图新鲜(DEVMAP/_NAV/board) / state 不假绿灯 / 目录骨架齐。挂 CI 或 pre-commit 即防漂。
+
+## Skills 部署
+
+`dev/skills/{name}/SKILL.md` 是项目内 skill 源码,不会被 Claude Code 自动识别。默认只部署 Claude Code 路径:
+
+- 项目级: `.claude/skills/{name}/SKILL.md`
+- 用户级: `~/.claude/skills/{name}/SKILL.md`
+
+Codex `.agents/skills/` 不再默认复制;只有显式传 `--target codex` 才部署。
+
+部署命令:
+
+```bash
+python dev/scripts/deploy_skills.py                         # 预览项目级 .claude/skills 部署
+python dev/scripts/deploy_skills.py --write --replace       # 部署到项目级 .claude/skills
+python dev/scripts/deploy_skills.py --scope user --write --replace  # 部署到用户级 ~/.claude/skills
+```
+
+`--mode symlink` 可改为符号链接部署;默认 copy 适合提交或打包项目状态。
 
 ## 新 session 怎么开始
 

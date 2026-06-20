@@ -11,6 +11,7 @@
 | `build_ledger.py` | 【开发os级别】勿改 | 扫 pool + 每人 active/done → 全含量任务账本（含 owner 列）。 |
 | `build_card_counters.py` | 【开发os级别】勿改 | 从卡 OQ 标签派生 `已决 D/总` 写回（人别手敲）。 |
 | `build_log_index.py` | 【开发os级别】勿改 | 遍历全员 `log/*/log.md` → 统一时间线索引（支撑「强制查 LOG」）。 |
+| `deploy_skills.py` | 【开发os级别】勿改 | 将 `dev/skills/*` 部署到 Claude Code `.claude/skills/` 的项目级识别目录；Codex 目标只在显式 `--target codex` 时使用。 |
 
 ## 跑
 ```bash
@@ -18,6 +19,9 @@ python dev/scripts/validate_dev.py     # OS 结构 + 团队 + 项目检查一起
 python dev/scripts/build_board.py       # 刷新本人工作板 board/{你}/board.md
 python dev/scripts/build_dev_map.py     # 刷新全局导航 DEVMAP.md + 各 _NAV.md
 python dev/scripts/build_ledger.py      # 全含量任务表
+python dev/scripts/deploy_skills.py     # 预览项目级 Claude skills 部署
+python dev/scripts/deploy_skills.py --write --replace  # 部署/刷新到项目级 .claude/skills
+python dev/scripts/deploy_skills.py --scope user --write --replace  # 部署/刷新到用户级 ~/.claude/skills
 ```
 
 ## 适配新项目
