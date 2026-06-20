@@ -66,9 +66,13 @@
     │   ├── build_dev_map.py              生成 DEVMAP + 各 _NAV
     │   ├── build_ledger.py               全含量任务账本
     │   ├── build_card_counters.py        OQ 计数器派生
-    │   └── build_log_index.py            全员 LOG 统一索引
+    │   ├── build_log_index.py            全员 LOG 统一索引
+    │   └── deploy_skills.py              部署 dev/skills 到 Claude 识别目录
     │
-    └─❽ 生成的导航（脚本现生成 · 勿手改 · 只定位）
+    ├─❽ Agent skills/
+    │   └── {skill}/SKILL.md              skill 源码(默认部署后进 .claude)
+    │
+    └─❾ 生成的导航（脚本现生成 · 勿手改 · 只定位）
         ├── DEVMAP.md                     全员→卡(按 developer + area)
         └── {type}/_NAV.md                各 folder 的 developer→文件 索引
 ```
@@ -202,7 +206,16 @@ python dev/scripts/validate_dev.py
 ```
 > 没填 `.identity` 时它会报 "`.identity` 为空/缺失",这是正常的初始化提示;把 .identity、state、log 补齐后就转 PASS。
 
-### 6. 日常开发
+### 6. 部署 Agent skills（按需）
+`dev/skills/` 是源码位置;默认只部署到 Claude Code 识别的项目级 `.claude/skills/` 或用户级 `~/.claude/skills/`。搬进项目后运行:
+
+```bash
+python dev/scripts/deploy_skills.py
+python dev/scripts/deploy_skills.py --write --replace
+python dev/scripts/deploy_skills.py --scope user --write --replace
+```
+
+### 7. 日常开发
 入口提示词是 `dev/exec/HANDOFF.md`,整段复制给新 session。
 - 取卡:developer 取自己 `tasks/{你}/` 名下的 todo;leader/admin 从 `tasks/pool/` 分配。
 - 干活:写实现,配上对抗测试(种一个已知的 bug,测试得抓住),跑绿、不破基线。

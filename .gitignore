@@ -4,3 +4,6 @@ __pycache__/
 
 # 注：dev/.identity = 本机开发者身份。本框架仓库 ship 一个空占位(故此处**不** ignore)；
 # 采纳到你的项目后,把 `dev/.identity` 加进**你项目的** .gitignore(每人各异、不入库)。
+
+# Local Claude skill deployment output; source lives in dev/skills/.
+.claude/
